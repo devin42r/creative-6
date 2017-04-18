@@ -15,7 +15,7 @@ limitations under the License.
 <head>
   <meta charset=utf-8 />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Sign In Example</title>
+  <title>Facebook Sign In Example</title>
 
   <!-- Material Design Theming -->
   <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
@@ -46,16 +46,20 @@ limitations under the License.
     function toggleSignIn() {
       if (!firebase.auth().currentUser) {
         // [START createprovider]
-        var provider = new firebase.auth.GithubAuthProvider();
+        var provider = new firebase.auth.FacebookAuthProvider();
         // [END createprovider]
         // [START addscopes]
-        provider.addScope('repo');
+        provider.addScope('user_location');
         // [END addscopes]
         // [START signin]
         firebase.auth().signInWithRedirect(provider);
         // [END signin]
       } else {
         // [START signout]
+          document.getElementById('mainText').textContent = '';
+          document.getElementById('mainImage').src = '';
+          document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
+          document.getElementById('quickstart-sign-in').textContent = 'Sign in with Facebook';
         firebase.auth().signOut();
         // [END signout]
       }
@@ -76,12 +80,12 @@ limitations under the License.
       // [START getidptoken]
       firebase.auth().getRedirectResult().then(function(result) {
         if (result.credential) {
-          // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           var token = result.credential.accessToken;
           // [START_EXCLUDE]
-          document.getElementById('quickstart-oauthtoken').textContent = token;
+//          document.getElementById('quickstart-oauthtoken').textContent = token;
         } else {
-          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+//          document.getElementById('quickstart-oauthtoken').textContent = 'null';
           // [END_EXCLUDE]
         }
         // The signed-in user info.
@@ -118,17 +122,19 @@ limitations under the License.
           var uid = user.uid;
           var providerData = user.providerData;
           // [START_EXCLUDE]
+          document.getElementById('mainText').textContent = 'Hello ' + user.displayName;
+          document.getElementById('mainImage').src=user.photoURL;
           document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
           document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+//          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
           // [END_EXCLUDE]
         } else {
           // User is signed out.
           // [START_EXCLUDE]
           document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-          document.getElementById('quickstart-sign-in').textContent = 'Sign in with GitHub';
-          document.getElementById('quickstart-account-details').textContent = 'null';
-          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+          document.getElementById('quickstart-sign-in').textContent = 'Sign in with Facebook';
+//          document.getElementById('quickstart-account-details').textContent = 'null';
+//          document.getElementById('quickstart-oauthtoken').textContent = 'null';
           // [END_EXCLUDE]
         }
         // [START_EXCLUDE]
@@ -160,22 +166,20 @@ limitations under the License.
 
       <!-- Container for the demo -->
       <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
-          <h2 class="mdl-card__title-text">GitHub Authentication with Redirect</h2>
-        </div>
         <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-          <p>Sign in with your GitHub account below.</p>
+          <p id="mainText">Sign in with your Facebook account below.</p>
+          <img id="mainImage" src="">
 
           <!-- Button that handles sign-in/sign-out -->
-          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in">Sign in with GitHub</button>
+          <button disabled class="mdl-button mdl-js-button mdl-button--raised" id="quickstart-sign-in">Sign in with Facebook</button>
 
           <!-- Container where we'll display the user details -->
           <div class="quickstart-user-details-container">
             Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
-            <div>Firebase auth <code>currentUser</code> object value:</div>
-            <pre><code id="quickstart-account-details">null</code></pre>
-            <div>GitHub OAuth Access Token:</div>
-            <pre><code id="quickstart-oauthtoken">null</code></pre>
+            <!--<div>Firebase auth <code>currentUser</code> object value:</div>-->
+            <!--<pre><code id="quickstart-account-details">null</code></pre>-->
+            <!--<div>Facebook OAuth Access Token:</div>-->
+            <!--<pre><code id="quickstart-oauthtoken">null</code></pre>-->
           </div>
         </div>
       </div>
